@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Stream Finder</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#100d19;color:white;font-family:Arial,sans-serif}
+header{padding:22px 7%;background:#1c1530;border-bottom:1px solid #392957}
+.logo{font-size:23px;font-weight:bold;color:#b68aff}
+.logo span{color:white}
+main{max-width:1100px;margin:35px auto;padding:0 20px}
+h1{font-size:32px;margin-bottom:8px}
+.sub{color:#b7aec7;line-height:1.6}
+.search{display:flex;gap:10px;margin:25px 0;flex-wrap:wrap}
+input,select{background:#211a30;border:1px solid #493565;color:white;padding:14px;border-radius:9px;flex:1;min-width:180px}
+button{background:#9147ff;color:white;border:0;padding:14px 20px;border-radius:9px;font-weight:bold;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin:25px 0}
+.stat,.streamer{background:#1d1729;padding:20px;border:1px solid #35264b;border-radius:12px}
+.stat strong{display:block;font-size:25px;color:#b68aff;margin-top:8px}
+.section{margin-top:35px}
+.streamers{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.streamer h3{margin:10px 0}
+.streamer p{color:#b7aec7;font-size:14px}
+.tag{color:#c49aff;font-size:12px}
+a{color:#c49aff;text-decoration:none}
+footer{text-align:center;color:#8f849f;padding:35px}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">VIBE <span>STREAM FINDER</span></div>
+</header>
+<main>
+ <h1>Find Your Next Twitch Client 🚀</h1>
+ <p class="sub">Discover streamers, explore gaming categories and organize potential promotion clients.</p>
+
+ <div class="search">
+  <input id="search" placeholder="Search streamer or game...">
+  <select id="game">
+   <option value="">All games</option>
+   <option>Fortnite</option>
+   <option>Just Chatting</option>
+   <option>Minecraft</option>
+   <option>Valorant</option>
+  </select>
+  <button onclick="filterStreams()">Search</button>
+ </div>
+
+ <div class="stats">
+  <div class="stat">Platform<strong>Twitch</strong></div>
+  <div class="stat">Discovery<strong>Streamers</strong></div>
+  <div class="stat">Your prospects<strong id="saved">0</strong></div>
+ </div>
+
+ <section class="section">
+  <h2>Streamer Discovery</h2>
+  <p class="sub">Example listings below are demonstration data, not live Twitch results.</p>
+  <div class="streamers" id="results"></div>
+ </section>
+</main>
+<footer>VIBE STREAM FINDER · Discover. Connect. Grow.</footer>
+
+<script>
+const channels=[
+ {name:"SampleGamer01",game:"Fortnite",viewers:24},
+ {name:"CreativePlayer",game:"Minecraft",viewers:12},
+ {name:"ChillStreamer",game:"Just Chatting",viewers:8},
+ {name:"ProArena",game:"Valorant",viewers:35}
+];
+let saved=[];
+function show(list){
+ document.getElementById("results").innerHTML=list.map(c=>`
+ <div class="streamer">
+  <span class="tag">${c.game}</span>
+  <h3>${c.name}</h3>
+  <p>Example viewer count: ${c.viewers}</p>
+  <button onclick="save('${c.name}')">
+   ${saved.includes(c.name)?"Saved ✓":"Save prospect"}
+  </button>
+ </div>`).join("")||"<p>No matching examples found.</p>";
+}
+function filterStreams(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const g=document.getElementById("game").value;
+ show(channels.filter(c=>
+  c.name.toLowerCase().includes(q)||c.game.toLowerCase().includes(q)
+ ).filter(c=>!g||c.game===g));
+}
+function save(name){
+ if(!saved.includes(name))saved.push(name);
+ document.getElementById("saved").textContent=saved.length;
+ filterStreams();
+}
+show(channels);
+</script>
+</body>
+</html>
